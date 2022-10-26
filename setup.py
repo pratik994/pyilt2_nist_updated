@@ -25,7 +25,6 @@ setup(
     package_data={'': ['README.md', 'LICENSE', 'CHANGELOG','requirements.txt']},
     data_files = [('man/man1', ['pyilt2report.1'])],
     include_package_data=True,
-    long_description=read('README.md'),
     install_requires=read('requirements.txt').splitlines(),
     classifiers=[
         'Operating System :: OS Independent',
