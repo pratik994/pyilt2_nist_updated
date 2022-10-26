@@ -75,7 +75,7 @@ import numpy as np
 from .proplist import prop2abr, abr2prop, abr2key, properties
 from .version import __version__
 
-__license__ = "MIT"
+__license__   = "MIT"
 __docformat__ = 'reStructuredText'
 
 searchUrl = "http://ilthermo.boulder.nist.gov/ILT2/ilsearch"
@@ -106,30 +106,23 @@ def query(comp='', numOfComp=0, year='', author='', keywords='', prop=''):
     :raises pyilt2.queryError: if the database returns an Error on a query
     """
     if prop:
-        print(f"search with a property hash key: {prop}")
-        """
         if prop not in abr2prop.keys():
             raise propertyError(prop)
         else:
             # prp = properties[prop][0]
             prp = abr2key[prop]
-            #prp = "aZvO"
-        """
-        prp=prop
     else:
         prp = ''
     params = dict(
-        cmp=comp,
-        ncmp=numOfComp,
-        year=year,
-        auth=author,
-        keyw=keywords,
-        prp=prp
+        cmp = comp,
+        ncmp = numOfComp,
+        year = year,
+        auth = author,
+        keyw = keywords,
+        prp = prp
     )
-    #print(params)
     r = requests.get(searchUrl, params=params)
     resDict = r.json()
-    #print(resDict)
     if len(resDict['errors']) > 0:
         e = " *** ".join(resDict['errors'])
         raise queryError(e)
@@ -166,8 +159,8 @@ class result(object):
         # create reference objects
         self.refs = []
         for ref in self.resDict['res']:
-            ref = self._makeRefDict(ref)
-            self.refs.append(reference(ref))
+            ref = self._makeRefDict( ref )
+            self.refs.append( reference(ref) )
 
     def __len__(self):
         return len(self.refs)
@@ -189,7 +182,7 @@ class result(object):
     def _makeRefDict(self, refList):
         out = {}
         for i in range(0, len(refList)):
-            out[self.resDict['header'][i]] = refList[i]
+            out[ self.resDict['header'][i] ] = refList[i]
         return out
 
 
@@ -268,10 +261,10 @@ class reference(object):
         return int(self.refDict['np'])
 
     def _parseComp(self):
-        for k in ['nm1', 'nm2', 'nm3']:
+        for k in ['nm1','nm2','nm3']:
             if self.refDict.get(k):
                 self.numOfComp += 1
-                self.listOfComp.append(self.refDict[k])
+                self.listOfComp.append( self.refDict[k])
 
     def get(self):
         """ Returns the full data according to this reference.
@@ -354,8 +347,8 @@ class dataset(object):
             self.physUnits.append(units)
             self.phases.append(phase)
             if self._incol[cnt] is 2:
-                self.headerList.append('Delta(prev)')
-                self.physProps.append('Delta[{0:s}]'.format(prop))
+                self.headerList.append( 'Delta(prev)' )
+                self.physProps.append( 'Delta[{0:s}]'.format(prop) )
                 self.physUnits.append(units)
                 self.phases.append(phase)
             cnt += 1
@@ -395,7 +388,7 @@ class dataset(object):
         """List of component names as strings."""
         out = []
         for comp in self.setDict['components']:
-            out.append(comp['name'])
+            out.append( comp['name'] )
         return out
 
     @property
@@ -425,7 +418,7 @@ class dataset(object):
 class queryError(Exception):
     """Exception if the database returns an Error on a query."""
 
-    def __init__(self, note):
+    def __init__(self,note):
         self.msg = note
 
     def __str__(self):
@@ -435,9 +428,8 @@ class queryError(Exception):
 class propertyError(Exception):
     """Exception if an invalid abbreviation (for physical property) is defined."""
 
-    def __init__(self, prop):
-        self.msg = 'Invalid abbreviation "{0:s}" for physical property!'.format(
-            prop)
+    def __init__(self,prop):
+        self.msg = 'Invalid abbreviation "{0:s}" for physical property!'.format(prop)
 
     def __str__(self):
         return repr(self.msg)
@@ -450,9 +442,9 @@ class setIdError(Exception):
     even if the set id is invalid (I would expect here a 404er!),
     this exception class was introduced.
     """
-
-    def __init__(self, setid):
+    def __init__(self,setid):
         self.msg = 'SetID "{0:s}" is unknown for NIST!'.format(setid)
 
     def __str__(self):
         return repr(self.msg)
+
